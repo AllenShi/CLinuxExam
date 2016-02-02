@@ -23,6 +23,7 @@
 #include <unistd.h>
 #include <pthread.h>
 
+#define BUF_SIZE 2048 
 
 void * connection_handler(void *socket_fd); 
 
@@ -82,10 +83,10 @@ int main(int argc, char *argv[]) {
 void * connection_handler(void *socket_fd) {
     //Get the socket descriptor
     int sock = *(int *)socket_fd;
-    char send_buffer[512], client_message[2*1024];
+    char client_message[BUF_SIZE];
 
     int n;
-    while((n = recv(sock, client_message, 2*1024, 0) > 0)) {
+    while((n = recv(sock, client_message, BUF_SIZE, 0) > 0)) {
         send(sock, client_message, n, 0);
     }
     close(sock);
